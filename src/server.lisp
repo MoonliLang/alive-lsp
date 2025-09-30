@@ -164,7 +164,7 @@
                      :untrace-pkg (lambda (pkg-name) (alive/sys/traced-fns:untrace-pkg pkg-name))
                      :load-asdf-system (lambda (&rest args) (apply 'alive/sys/asdf:load-system args))
                      :get-thread-id (lambda (thread) (alive/sys/threads:get-id thread))
-                     :eval-fn (lambda (arg) (alive/sys/eval:eval-fn arg))
+                     :eval-fn (lambda (arg lang) (alive/sys/eval:eval-fn arg lang))
                      :macro-expand (lambda (txt pkg) (alive/macros:expand txt pkg))
                      :macro-expand-1 (lambda (txt pkg) (alive/macros:expand-1 txt pkg))
                      :try-compile (lambda (path) (alive/file:try-compile path))

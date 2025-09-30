@@ -166,10 +166,10 @@
                                  ((= 1 (length found-tokens)) (list (first found-tokens) nil nil))))))
 
 
-(defun for-pos (text pos)
+(defun for-pos (text pos lang)
     (let* ((raw-tokens (tokenizer:from-stream (make-string-input-stream text)))
            (tokens (find-tokens raw-tokens pos))
-           (pkg-name (packages:for-pos text pos))
+           (pkg-name (packages:for-pos text pos lang))
            (pkg (packages:lookup pkg-name))
            (*package* (or pkg *package*)))
 

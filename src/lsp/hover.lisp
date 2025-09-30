@@ -21,12 +21,12 @@
                         (T (describe sym str)))))))
 
 
-(defun get-text (&key text pos)
-    (let* ((pkg-name (packages:for-pos text pos))
+(defun get-text (&key text pos lang)
+    (let* ((pkg-name (packages:for-pos text pos lang))
            (pkg (packages:lookup pkg-name))
            (*package* (if pkg pkg *package*)))
 
         (multiple-value-bind (name pkg-name)
-                (symbols:for-pos text pos)
+                (symbols:for-pos text pos lang)
             (when (and name pkg-name)
                   (get-symbol-doc name pkg-name)))))

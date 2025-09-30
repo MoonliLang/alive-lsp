@@ -74,9 +74,9 @@
                 refs)))
 
 
-(declaim (ftype (function (string pos:text-position) (or null cons)) get-locations))
-(defun get-locations (text pos)
+(declaim (ftype (function (string pos:text-position (or null keyword)) (or null cons)) get-locations))
+(defun get-locations (text pos lang)
     (multiple-value-bind (name pkg-name)
-            (sym:for-pos text pos)
+            (sym:for-pos text pos lang)
         (when (and name pkg-name)
               (find-references name pkg-name))))

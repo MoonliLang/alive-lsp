@@ -214,9 +214,9 @@
               "#\\tab")))
 
 
-(defun simple (&key text pos)
+(defun simple (&key text pos lang)
     (let* ((tokens (tokenizer:from-stream (make-string-input-stream text)))
-           (pkg (packages:lookup (packages:for-pos text pos)))
+           (pkg (packages:lookup (packages:for-pos text pos lang)))
            (*package* (if pkg pkg *package*)))
 
         (if (zerop (length tokens))

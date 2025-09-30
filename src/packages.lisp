@@ -6,7 +6,8 @@
              :lookup
              :package-not-found
              :do-remove
-             :unexport-symbol)
+             :unexport-symbol
+             :*parse-function-alist*)
     (:local-nicknames (:form :alive/parse/form)
                       (:forms :alive/parse/forms)
                       (:logger :alive/logger)
@@ -71,8 +72,15 @@
             (string-downcase (package-name pkg))
             "cl-user")))
 
+(defvar *parse-function-alist*
+  (list (cons nil #'identity)
+        (cons :lisp #'identity)
+        (cons :cl #'identity)
+        (cons :asdf #'identity)
+        (cons :asd #'identity)))
 
-(defun for-pos (text pos)
+(defun for-pos (text pos lang)
+  (let ((text (funcall (cdr (assoc lang *parse-function-alist*)) text)))
     (loop :with forms := (forms:from-stream (make-string-input-stream text))
           :with pkg := "cl-user"
 
@@ -80,11 +88,11 @@
           :until (pos:less-or-equal pos (form:get-start form))
           :do (when (and (form:is-in-pkg form)
                          (<= 2 (length (form:get-kids form))))
-                    (setf pkg (name-from-string (subseq text
-                                                        (form:get-start-offset (elt (form:get-kids form) 1))
-                                                        (form:get-end-offset (elt (form:get-kids form) 1))))))
+                (setf pkg (name-from-string (subseq text
+                                                    (form:get-start-offset (elt (form:get-kids form) 1))
+                                                    (form:get-end-offset (elt (form:get-kids form) 1))))))
 
-          :finally (return pkg)))
+          :finally (return pkg))))
 
 
 (defun do-remove (name)

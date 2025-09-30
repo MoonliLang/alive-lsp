@@ -96,14 +96,18 @@
            (text (or (cdr (assoc :text params)) "nil"))
            (inspector (when insp-id (state:get-inspector state insp-id)))
            (old-result (inspector:get-result inspector))
+           (doc (cdr (assoc :text-document params)))
+           (uri (cdr (assoc :uri doc)))
+           (lang (state:get-file-lang state uri))
            (* (if (symbolp old-result)
                   (symbol-value old-result)
                   old-result))
            (pkg-name (inspector:get-pkg inspector))
            (result (eval:from-string deps text
                                      :pkg-name pkg-name
+                                     :lang lang
                                      :stdin-fn (lambda ()
-                                                   (threads:wait-for-input deps state))
+                                                 (threads:wait-for-input deps state))
                                      :stdout-fn (lambda (data)
                                                     (deps:send-msg deps (notification:stdout data)))
                                      :stderr-fn (lambda (data)

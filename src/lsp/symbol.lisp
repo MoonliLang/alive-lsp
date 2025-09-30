@@ -11,13 +11,13 @@
 (in-package :alive/lsp/symbol)
 
 
-(defun for-pos (&key text pos)
-    (let* ((pkg-name (packages:for-pos text pos))
+(defun for-pos (&key text pos lang)
+    (let* ((pkg-name (packages:for-pos text pos lang))
            (pkg (packages:lookup pkg-name))
            (*package* (if pkg pkg *package*)))
 
         (multiple-value-bind (name pkg-name)
-                (alive/symbols:for-pos text pos)
+                (alive/symbols:for-pos text pos lang)
             (when (and name pkg-name)
                   (list name pkg-name)))))
 

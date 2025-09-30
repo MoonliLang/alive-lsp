@@ -85,7 +85,8 @@
            (pos (cdr (assoc :position params)))
            (uri (cdr (assoc :uri doc)))
            (text (or (state:get-file-text state uri) ""))
-           (pkg (packages:for-pos text pos))
+           (lang (state:get-file-lang state uri))
+           (pkg (packages:for-pos text pos lang))
            (*package* (or (packages:lookup pkg) *package*))
            (to-trace (get-function-for-pos text pos))
            (result (if to-trace
@@ -103,7 +104,8 @@
            (pos (cdr (assoc :position params)))
            (uri (cdr (assoc :uri doc)))
            (text (or (state:get-file-text state uri) ""))
-           (pkg (packages:for-pos text pos))
+           (lang (state:get-file-lang state uri))
+           (pkg (packages:for-pos text pos lang))
            (*package* (or (packages:lookup pkg) *package*))
            (to-untrace (get-function-for-pos text pos)))
 

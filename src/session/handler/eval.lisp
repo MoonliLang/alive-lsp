@@ -17,13 +17,17 @@
            (params (cdr (assoc :params msg)))
            (pkg-name (cdr (assoc :package params)))
            (text (cdr (assoc :text params)))
+           (doc (cdr (assoc :text-document params)))
+           (uri (cdr (assoc :uri doc)))
+           (lang (state:get-file-lang state uri))
            (* (state:get-history-item state 0))
            (** (state:get-history-item state 1))
            (*** (state:get-history-item state 2))
            (results (eval:from-string deps text
                                       :pkg-name pkg-name
+                                      :lang lang
                                       :stdin-fn (lambda ()
-                                                    (threads:wait-for-input deps state))
+                                                  (threads:wait-for-input deps state))
                                       :stdout-fn (lambda (data)
                                                      (deps:send-msg deps (notification:stdout data)))
                                       :query-fn (lambda (data)

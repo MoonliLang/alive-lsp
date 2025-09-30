@@ -19,7 +19,8 @@
            (pos (cdr (assoc :position params)))
            (uri (cdr (assoc :uri doc)))
            (text (or (state:get-file-text state uri) ""))
-           (pkg (packages:for-pos text pos)))
+           (lang (state:get-file-lang state uri))
+           (pkg (packages:for-pos text pos lang)))
 
         (utils:result id "package" pkg)))
 

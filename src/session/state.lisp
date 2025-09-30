@@ -7,6 +7,7 @@
              :add-inspector
              :add-listener
              :get-file-text
+             :get-file-lang
              :get-history-item
              :get-inspector
              :get-log
@@ -143,6 +144,14 @@
 (declaim (ftype (function (state string) (or null string)) get-file-text))
 (defun get-file-text (state uri)
     (gethash uri (state-files state)))
+
+(declaim (ftype (function (state string) (or null keyword)) get-file-lang))
+(defun get-file-lang (state uri)
+    (declare (ignore state))
+  (let ((lang (intern (string-upcase (pathname-type uri)) :keyword)))
+    (if (eq lang :nil)
+        nil
+        lang)))
 
 
 (defmacro next-id (state fn)

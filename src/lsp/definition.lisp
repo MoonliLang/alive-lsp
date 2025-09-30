@@ -13,12 +13,12 @@
         (sym:get-location sym)))
 
 
-(defun get-location (&key text pos)
-    (let* ((pkg-name (packages:for-pos text pos))
+(defun get-location (&key text pos lang)
+    (let* ((pkg-name (packages:for-pos text pos lang))
            (pkg (packages:lookup pkg-name))
            (*package* (or pkg *package*)))
 
         (multiple-value-bind (name pkg-name)
-                (sym:for-pos text pos)
+                (sym:for-pos text pos lang)
             (when (and name pkg-name)
                   (get-location-for-name name pkg-name)))))

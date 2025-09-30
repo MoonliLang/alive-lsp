@@ -92,8 +92,8 @@
           :finally (return param)))
 
 
-(declaim (ftype (function (&key (:text string) (:pos pos:text-position)) (values (or null cons) &optional)) signatures))
-(defun signatures (&key text pos)
+(declaim (ftype (function (&key (:text string) (:pos pos:text-position) (:lang (or null keyword))) (values (or null cons) &optional)) signatures))
+(defun signatures (&key text pos lang)
     (let* ((forms (forms:from-stream-or-nil (make-string-input-stream text)))
            (tokens (tokenizer:from-stream (make-string-input-stream text)))
            (top-form (forms:get-top-form forms pos))
@@ -105,7 +105,7 @@
                              0))
            (name-tokens (when (hash-table-p name-form)
                               (symbols:find-tokens tokens (gethash "end" name-form))))
-           (pkg-name (alive/packages:for-pos text pos))
+           (pkg-name (alive/packages:for-pos text pos lang))
            (pkg (pkgs:lookup pkg-name))
            (*package* (if pkg pkg *package*)))
 
