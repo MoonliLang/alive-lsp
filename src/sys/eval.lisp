@@ -9,17 +9,20 @@
 
 (in-package :alive/sys/eval)
 
+(defvar *last-read-function* #'read)
 
 (defvar *read-function-alist*
-  (list (cons nil #'read)
-        (cons :lisp #'read)
+  (list (cons :lisp #'read)
         (cons :cl #'read)
         (cons :asd #'read)
         (cons :asdf #'read)))
 (declaim (ftype (function (stream (or null keyword)) *) eval-fn))
 (defun eval-fn (input lang)
-  (eval (funcall (cdr (assoc lang *read-function-alist*))
-                 input)))
+  (let ((read-function (if lang
+                           (cdr (assoc lang *read-function-alist*))
+                           *last-read-function*)))
+    (setf *last-read-function* read-function)
+    (eval (funcall read-function input))))
 
 
 (declaim (ftype (function (deps:dependencies string &key
